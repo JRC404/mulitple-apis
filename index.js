@@ -3,6 +3,7 @@ const hbs = require('express-handlebars');
 const path = require('path');
 const app = express();
 
+require('dotenv').config();
 const PORT = process.env.PORT
 
 const getAPIdata = require('./lib/apiData');
@@ -38,7 +39,18 @@ app.get('/rickandmorty', async (req, res) => {
     })
 })
 
+app.get('/nasa', async (req, res) => {
+    let data = await getAPIdata.nasaData();
+    console.log(data);
 
+    let copyright = data.copyright;
+    let date = data.date;
+    let explanation = data.explanation;
+    let image = data.hdurl;
+
+    res.render('nasa', {data: { copyright, date, explanation, image}})
+    
+})
 
 app.listen(PORT || 3000, () => {
     console.log(`server listening on ${PORT}`);
