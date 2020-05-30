@@ -15,6 +15,7 @@ app.set('view engine', '.hbs');
 
 app.get('/', async (req, res) => {
     let name = "Jacob"
+    console.log(name)
     res.render('index', {
         name
     });
