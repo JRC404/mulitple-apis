@@ -1,6 +1,8 @@
 const express = require('express');
 const hbs = require('express-handlebars');
 const path = require('path');
+const bodyParser = require('body-parser');
+// npm i body-parser
 const app = express();
 
 require('dotenv').config();
@@ -8,6 +10,9 @@ const PORT = process.env.PORT
 
 const getAPIdata = require('./lib/apiData');
 
+app.use(bodyParser.urlencoded({extended: false}));
+// ignore data types and make EVERYTHING a string
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.engine('.hbs', hbs({
@@ -17,11 +22,17 @@ app.engine('.hbs', hbs({
 app.set('view engine', '.hbs');
 
 app.get('/', async (req, res) => {
-    let name = "Jacob"
-    console.log(name)
-    res.render('index', {
-        name
-    });
+    res.render('index');
+})
+
+app.get('/starwars', async (req, res) => {
+    res.render('starwars');
+})
+
+app.post('/starwars', async(req, res) => {
+    let number = req.body.number;
+    let response = await getAPIdata.sortData(number);
+    res.render('starwars', { response });
 })
 
 app.get('/rickandmorty', async (req, res) => {
@@ -48,8 +59,8 @@ app.get('/nasa', async (req, res) => {
     let explanation = data.explanation;
     let image = data.hdurl;
 
-    res.render('nasa', {data: { copyright, date, explanation, image}})
-    
+    res.render('nasa', { data: { copyright, date, explanation, image } })
+
 })
 
 app.listen(PORT || 3000, () => {
