@@ -1,1 +1,9 @@
-<h1>My name is hello</h1>
+<form action="/" method="post">
+    <input type="text" name="city">
+    {{!-- req.body.whateverYourNameIs --}}
+    <input type="submit" value="submit">
+</form>
+
+{{#each data}}
+<p>{{this}}</p>
+{{/each}}

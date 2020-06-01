@@ -9,6 +9,7 @@ require('dotenv').config();
 const PORT = process.env.PORT
 
 const getAPIdata = require('./lib/apiData');
+const getWeather = require('./lib/getWeather');
 
 app.use(bodyParser.urlencoded({extended: false}));
 // ignore data types and make EVERYTHING a string
@@ -21,9 +22,9 @@ app.engine('.hbs', hbs({
 }));
 app.set('view engine', '.hbs');
 
-app.get('/', async (req, res) => {
-    res.render('index');
-})
+// app.get('/', async (req, res) => {
+//     res.render('index');
+// })
 
 app.get('/starwars', async (req, res) => {
     res.render('starwars');
@@ -35,9 +36,29 @@ app.post('/starwars', async(req, res) => {
     res.render('starwars', { response });
 })
 
+app.get('/', async (req, res) => {
+    res.render('index');
+})
+
+app.post('/', async (req, res) => {
+    let city = req.body.city;
+    let data = await getWeather(city);
+    
+    let name = data.name
+    let temp = data.main.temp;
+    res.render('index', 
+    {data: 
+        {name, temp}
+    });
+})
+
 app.get('/rickandmorty', async (req, res) => {
-    let data = await getAPIdata.rickAndMortyData();
-    console.log(data)
+    res.render('rickandmorty')
+})
+
+app.post('/rickandmorty', async (req, res) => {
+    let number = req.body.number;
+    let data = await getAPIdata.rickAndMortyData(number);
 
     let id = data.id
     let name = data.name
@@ -49,6 +70,8 @@ app.get('/rickandmorty', async (req, res) => {
         }
     })
 })
+
+
 
 app.get('/nasa', async (req, res) => {
     let data = await getAPIdata.nasaData();
