@@ -22,9 +22,9 @@ app.engine('.hbs', hbs({
 }));
 app.set('view engine', '.hbs');
 
-// app.get('/', async (req, res) => {
-//     res.render('index');
-// })
+app.get('/', async (req, res) => {
+    res.render('index');
+})
 
 app.get('/starwars', async (req, res) => {
     res.render('starwars');
@@ -36,17 +36,17 @@ app.post('/starwars', async(req, res) => {
     res.render('starwars', { response });
 })
 
-app.get('/', async (req, res) => {
-    res.render('index');
+app.get('/weather', async (req, res) => {
+    res.render('weather');
 })
 
-app.post('/', async (req, res) => {
+app.post('/weather', async (req, res) => {
     let city = req.body.city;
     let data = await getWeather(city);
     
     let name = data.name
     let temp = data.main.temp;
-    res.render('index', 
+    res.render('weather', 
     {data: 
         {name, temp}
     });
@@ -83,7 +83,6 @@ app.get('/nasa', async (req, res) => {
     let image = data.hdurl;
 
     res.render('nasa', { data: { copyright, date, explanation,  }, image })
-
 })
 
 app.listen(PORT || 3000, () => {
