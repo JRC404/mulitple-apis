@@ -42,13 +42,14 @@ app.get('/weather', async (req, res) => {
 
 app.post('/weather', async (req, res) => {
     let city = req.body.city;
-    let data = await getWeather(city);
+    let response = await getWeather(city);
+    console.log(response);
     
-    let name = data.name
-    let temp = data.main.temp;
+    // let name = data.name
+    // let temp = data.main.temp;
     res.render('weather', 
-    {data: 
-        {name, temp}
+    { 
+     response   
     });
 })
 
