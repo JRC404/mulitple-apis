@@ -82,7 +82,7 @@ app.get('/nasa', async (req, res) => {
     let explanation = data.explanation;
     let image = data.hdurl;
 
-    res.render('nasa', { data: { copyright, date, explanation, image } })
+    res.render('nasa', { data: { copyright, date, explanation,  }, image })
 
 })
 
